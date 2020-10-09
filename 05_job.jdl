@@ -1,0 +1,15 @@
+universe = docker
+docker_image = mschnepf/slc7-condocker
+executable = job.sh
+output = out/$(cluster).$(Process).out
+error = err/$(cluster).$(Process).err
+log = log/$(cluster).$(Process).log
+x509userproxy = /home/aissac/.globus/x509up
+use_x509userproxy = true
+Requirements = ( (Target.ProvidesIO == True) && (TARGET.ProvidesEKPResources == True ) )
++RequestWalltime = 1200
+RequestMemory = 2000
+RequestCpus = 1
+max_retries = 3
+accounting_group = cms
+queue arguments from arguments.txt
