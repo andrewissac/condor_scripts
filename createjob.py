@@ -6,6 +6,10 @@ import argparse
 # ATTENTION:
 # use python3 else math.floor/ceil will return floats and lead to problems on splitting datasets!
 
+def floatsAreEqual(a: float, b: float):
+    epsilon = 0.00001
+    return True if abs(a - b) < epsilon else False
+
 def mkdir(path):
     if not os.path.exists(path):
         os.mkdir(path)
@@ -104,7 +108,7 @@ echo "### End of job"
 currentDirectory =os.getcwd()
 parser = argparse.ArgumentParser()
 parser.add_argument("--argumentstxt", required=True, type=str, help="Filepath of arguments.txt")
-parser.add_argument("--jobsh", required=False, type=str, help="Filepath of job.sh")
+parser.add_argument("--jobsh", required=False, type=str, help="Filepath of job.sh - only interesting if no splits specified.")
 parser.add_argument("--jobdir", required=False, type=str, default=currentDirectory, help="Job directory. Is set to be the current directory if not specified.")
 parser.add_argument("--train", required=False, type=float, default=None, help="Specify train split (between 0.0-1.0).")
 parser.add_argument("--test", required=False, type=float, default=None, help="Specify test split (between 0.0-1.0).")
@@ -136,7 +140,7 @@ if(jobdir == currentDirectory):
 print("Copying arguments.txt file to job directory.")
 shutil.copy(args.argumentstxt, jobdir)
 
-if(sumSplits == 0.0): # don't split dataset
+if floatsAreEqual(sumSplits, 0.0): # don't split dataset
     initJobDir(jobdir)
     if(not stringIsNoneOrEmpty(args.jobsh)):
         print("Copying job.sh file to job directory.")
@@ -153,7 +157,7 @@ if(sumSplits == 0.0): # don't split dataset
         else:
             jobjdl.write(jdl.format(JOBSH="job.sh", ARGUMENTSTXT=args.argumentstxt))
 
-elif(sumSplits != 1.0):
+elif not floatsAreEqual(sumSplits,1.0):
     raise Exception("sum of train, test and validation splits must equal 1, but equals " + str(sumSplits))
 
 else: # sum of splits == 1.0
@@ -175,19 +179,19 @@ else: # sum of splits == 1.0
         mkdir(validDir)
         initJobDir(validDir)
 
-    if trainSplit == 1.0:
+    if floatsAreEqual(trainSplit, 1.0):
         trainDatasetSize = len(argumentsTXTList)
-    elif testSplit == 1.0:
+    elif floatsAreEqual(testSplit, 1.0):
         testDatasetSize = len(argumentsTXTList)
-    elif validSplit == 1.0:
+    elif floatsAreEqual(validSplit, 1.0):
         validDatasetSize = len(argumentsTXTList)
-    elif trainSplit == 0.0:
+    elif floatsAreEqual(trainSplit, 0.0):
         validDatasetSize = math.ceil(len(argumentsTXTList) * validSplit)
         testDatasetSize = len(argumentsTXTList) - validDatasetSize
-    elif testSplit == 0.0:
+    elif floatsAreEqual(testSplit, 0.0):
         validDatasetSize = math.ceil(len(argumentsTXTList) * validSplit)
         trainDatasetSize = len(argumentsTXTList) - validDatasetSize
-    elif validSplit == 0.0:
+    elif floatsAreEqual(validSplit, 0.0):
         trainDatasetSize = math.ceil(len(argumentsTXTList) * trainSplit)
         testDatasetSize = len(argumentsTXTList) - trainDatasetSize
     else:
@@ -206,7 +210,7 @@ else: # sum of splits == 1.0
         with open(os.path.join(testDir, "arguments.txt"), 'w') as a:
             a.writelines(argumentsTXTList[:testDatasetSize])
             coloredPrint("----- test split -----", bcolors.ORANGE)
-            print("Number of jobs in test split: ", len(argumentsTXTList[:trainDatasetSize]))
+            print("Number of jobs in test split: ", len(argumentsTXTList[:testDatasetSize]))
             del argumentsTXTList[:testDatasetSize]
             writeJobFiles(testDir, "test")
     if validDatasetSize > 0:
