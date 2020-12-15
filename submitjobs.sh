@@ -29,8 +29,8 @@ then
     cd $JOBDIR
     if test -f "job.jdl" 
     then
-        echo "Found job.jdl - begin submitting"
-        # condor_submit job.jdl
+        echo "condor_submit job.jdl"
+        condor_submit job.jdl
         echo "cd .."
         cd ..
     else
