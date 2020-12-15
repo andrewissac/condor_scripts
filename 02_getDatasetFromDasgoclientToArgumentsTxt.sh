@@ -17,7 +17,7 @@ DATASET=$2
 echo -e "${YELLOW}------------ Using dasgoclient query -------------${NC}"
 echo -e "${GREEN}>>start query on dataset: ${NC}" $DATASET
 
-dasgoclient --query="file dataset=/$DATASET" -json  > $OUTPUTJSONFILENAME
+dasgoclient --query="file dataset=$DATASET" -json  > $OUTPUTJSONFILENAME
 echo -e "${GREEN}>>output json file containing ROOT file paths: ${NC}" $OUTPUTJSONFILENAME
 echo -e "${YELLOW}------------ Finished dasgoclient query -------------${NC}"
 

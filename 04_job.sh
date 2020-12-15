@@ -33,6 +33,6 @@ cd /work/aissac/TauAnalyzer/CMSSW_10_2_18/src
 echo $PWD
 eval $(scram runtime -sh)
 cd -
-cmsRun /work/aissac/TauAnalyzer/CMSSW_10_2_18/src/Tau/TauAnalyzer/python/ConfFile_cfg.py $ID $ROOTFILE $DATASET
+cmsRun /work/aissac/TauAnalyzer/CMSSW_10_2_18/src/Tau/TauAnalyzer/python/ConfFile_cfg.py $ID $ROOTFILE $DATASET $OUTPUTDIR
 
 echo "### End of job"

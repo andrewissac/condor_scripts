@@ -20,7 +20,7 @@ def convertJsonROOTFileListToArgumentsTxt(jsonFilePath):
                     i += 1
         except json.JSONDecodeError:
             print("JSONDecodeError: Invalid JSON format.")
-
+    
     with open('arguments.txt', 'w') as argumentsFile:
         argumentsFile.writelines(rootFilesPaths)
 
